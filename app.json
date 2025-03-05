@@ -28,6 +28,7 @@
     },
     "plugins": [
       "expo-image-picker"
-    ]
+    ],
+    "sdkVersion": "52.0.0"
   }
 }
