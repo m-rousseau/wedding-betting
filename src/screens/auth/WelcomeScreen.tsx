@@ -19,7 +19,7 @@ const WelcomeScreen = ({ navigation }: WelcomeScreenProps) => {
 
         <View style={styles.imageContainer}>
           <Image
-            source={require('../../../assets/wedding-icon.png')}
+            source={require('../../../assets/icon.png')}
             style={styles.image}
             resizeMode="contain"
           />
