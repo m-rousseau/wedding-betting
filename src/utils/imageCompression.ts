@@ -1,6 +1,9 @@
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 
+// Define a type that includes the size property
+type FileInfoWithSize = FileSystem.FileInfo & { size?: number };
+
 /**
  * Compresses an image to ensure it's under 1MB
  * @param uri The URI of the image to compress
@@ -9,7 +12,7 @@ import * as FileSystem from 'expo-file-system';
 export const compressImage = async (uri: string): Promise<string> => {
   try {
     // First check the file size
-    const fileInfo = await FileSystem.getInfoAsync(uri, { size: true });
+    const fileInfo = await FileSystem.getInfoAsync(uri, { size: true }) as FileInfoWithSize;
     
     if (!fileInfo.exists) {
       throw new Error('File does not exist');
@@ -23,9 +26,9 @@ export const compressImage = async (uri: string): Promise<string> => {
     // Calculate compression quality based on file size
     // The larger the file, the more we compress
     let quality = 0.8;
-    if (fileInfo.size > 5 * 1024 * 1024) {
+    if (fileInfo.size && fileInfo.size > 5 * 1024 * 1024) {
       quality = 0.5;
-    } else if (fileInfo.size > 2 * 1024 * 1024) {
+    } else if (fileInfo.size && fileInfo.size > 2 * 1024 * 1024) {
       quality = 0.7;
     }
     
@@ -37,7 +40,7 @@ export const compressImage = async (uri: string): Promise<string> => {
     );
     
     // Check if the compressed image is still too large
-    const compressedInfo = await FileSystem.getInfoAsync(result.uri, { size: true });
+    const compressedInfo = await FileSystem.getInfoAsync(result.uri, { size: true }) as FileInfoWithSize;
     
     if (compressedInfo.size && compressedInfo.size > 1024 * 1024) {
       // If still too large, compress more aggressively
